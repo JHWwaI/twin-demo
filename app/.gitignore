@@ -1,0 +1,13 @@
+.venv/
+__pycache__/
+*.pyc
+.DS_Store
+wandb/
+
+# 무거운 산출물은 _artifacts 에서 link
+footage
+datasets
+runs/detect/runs/train
+
+# 검증 산출물 (가벼움, ppe_eval 5.8MB) 은 코드와 함께 보관 — Tab 4 데모용
+!runs/detect/outputs/ppe_eval/

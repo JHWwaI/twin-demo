@@ -1,0 +1,17 @@
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+# Training artifacts (redundant with docs/metrics; trained weight kept at app/models/best_v1.pt)
+app/runs/
+runs/
+wandb/
+# Secrets
+.env
+# OS / IDE
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.log

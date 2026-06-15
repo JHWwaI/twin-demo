@@ -1,0 +1,31 @@
+[project]
+name = "twin-demo"
+version = "0.1.0"
+description = "Industrial-safety PPE detection with YOLO11 + ByteTrack + Streamlit"
+readme = "../README.md"
+requires-python = ">=3.12"
+license = { text = "MIT" }
+authors = [
+    { name = "이재환 (Jaehwan Lee)", email = "dolchi37@gmail.com" },
+]
+keywords = [
+    "computer-vision",
+    "object-detection",
+    "yolo11",
+    "ultralytics",
+    "bytetrack",
+    "ppe-detection",
+    "industrial-safety",
+    "streamlit",
+]
+classifiers = [
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Scientific/Engineering :: Image Recognition",
+]
+dependencies = [
+    "opencv-python>=4.13.0.92",
+    "roboflow>=1.3.9",
+    "ultralytics>=8.4.62",
+    "wandb>=0.27.2",
+]
