@@ -1,0 +1,12 @@
+﻿class,mAP50,mAP50_95
+Hardhat,0.6861,0.4193
+Mask,0.7654,0.4044
+NO-Hardhat,0.3417,0.1496
+NO-Mask,0.4239,0.1736
+NO-Safety Vest,0.3546,0.1447
+Person,0.6658,0.3394
+Safety Cone,0.7347,0.3614
+Safety Vest,0.5562,0.2769
+machinery,0.6769,0.2967
+vehicle,0.2841,0.1662
+ALL,0.5490,0.2732
