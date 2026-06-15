@@ -41,6 +41,7 @@ WEIGHTS_CANDIDATES = [
 WEIGHTS = next((p for p in WEIGHTS_CANDIDATES if p.exists()), WEIGHTS_CANDIDATES[0])
 EVAL_DIR = ROOT / "runs" / "detect" / "outputs" / "ppe_eval"
 DOCS_METRICS_DIR = ROOT.parent / "docs" / "metrics"
+SAMPLES_DIR = ROOT / "samples"  # 예제 이미지 (클릭형 데모)
 
 # ---- UI 상수 ----
 # Plotly 시계열 색상 (작업자 vs 위험).
@@ -125,15 +126,34 @@ def _render_class_table(res: FrameResult) -> None:
 # ---------- TAB 1: 이미지 ----------
 def render_tab_image(detector: PPEDetector, conf: float, imgsz: int,
                      show_alarm: bool) -> None:
-    """이미지 업로드 → 검출 + 알람 + 카운트 탭."""
-    st.subheader("이미지 업로드 → 검출 + 알람")
+    """이미지 업로드/예제 선택 → 검출 + 알람 + 카운트 탭."""
+    st.subheader("이미지 업로드 또는 예제 클릭 → 검출 + 알람")
     up = st.file_uploader("PNG / JPG", type=["png", "jpg", "jpeg"], key="img_up")
-    if up is None:
-        return
-    arr = np.frombuffer(up.read(), np.uint8)
-    bgr = cv2.imdecode(arr, cv2.IMREAD_COLOR)
+
+    # 예제 갤러리 — 사진이 없어도 클릭해서 바로 검출
+    samples = sorted(SAMPLES_DIR.glob("*.jpg"))
+    if samples:
+        st.caption("예제 (건설현장 PPE) — 클릭하면 바로 검출됩니다")
+        ncol = 5
+        for r in range(0, len(samples), ncol):
+            cols = st.columns(ncol)
+            for c, sp in enumerate(samples[r:r + ncol]):
+                with cols[c]:
+                    st.image(str(sp), use_container_width=True)
+                    if st.button("이 예제", key=f"smp_{sp.name}"):
+                        st.session_state["img_sample"] = str(sp)
+
+    # 이미지 소스 결정 — 업로드가 예제보다 우선
+    bgr = None
+    if up is not None:
+        st.session_state.pop("img_sample", None)
+        arr = np.frombuffer(up.read(), np.uint8)
+        bgr = cv2.imdecode(arr, cv2.IMREAD_COLOR)
+    elif st.session_state.get("img_sample"):
+        bgr = cv2.imread(st.session_state["img_sample"])
+
     if bgr is None:
-        st.error("이미지 로드 실패")
+        st.info("이미지를 업로드하거나 위 예제를 클릭하세요.")
         return
     res = detector.predict_image(bgr, conf=conf, imgsz=imgsz)
     out = draw_boxes(bgr, res, show_alarm=show_alarm)
